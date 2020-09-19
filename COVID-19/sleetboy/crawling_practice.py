@@ -11,18 +11,15 @@ import os
 import json
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
+from tqdm import tqdm
 import urllib.request
+
 
 def read_article_data(path):
     """ 뉴스 기사의 정보가 있는 [path]파일을 읽음 """
     with open(path) as fin:
         return json.load(fin).get('news')
 
-
-#def crawler(url):
-#    """ 크롤링 해서 결과 return """
-#    pass
-#    return '크롤링 완료!'
 
 def crawler(url):
     """ 크롤링 해서 결과 return """
@@ -33,6 +30,7 @@ def crawler(url):
     target_text = bsObj.text
     return target_text
 
+
 def save_article_data(path, text):
     """ [text]의 내용을 [path]에 저장 """
     with open(path, 'w', encoding="utf-8") as fout:
@@ -40,14 +38,14 @@ def save_article_data(path, text):
 
 
 def main():
-    path_in_json = '\\Users\\cubana\\python101\\COVID-19\\news\\news.json'
-    path_out_dir = '\\Users\\cubana\\python101\\COVID-19\\sleetboy\\scrap_files'
+    path_in_json = '../news/news.json'
+    path_out_dir = 'scrap_files'
 
     # read input data
     news = read_article_data(path_in_json)
 
     # crawling
-    for article_info in news:
+    for article_info in tqdm(news, total=len(news)):
         text = crawler(article_info.get('url'))
         file_name = article_info.get('filename')
 
@@ -61,29 +59,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
-# import json
-# from urllib.request import urlopen
-# from bs4 import BeautifulSoup
-# import requests
-#
-# path = r'C:\Users\cubana\python101\COVID-19\news\news.json'
-#
-# def open_json_file(path):
-#     with open(path) as json_file:
-#         json_data = json.load(json_file)
-#     return json_data
-#
-# def url_list():
-#     b = []
-#     for a in open_json_file(path)["news"]:
-#         b.append(a["url"])
-#     return b
-#
-#
-# base_url = 'https://www.fda.gov/news-events/press-announcements/coronavirus-covid-19-update-daily-roundup-september-3-2020'
-# con = requests.get(base_url)
-# soup = BeautifulSoup(con.content, 'lxml')
-# for
-# print(soup)
